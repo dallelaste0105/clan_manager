@@ -5,18 +5,15 @@ export default function CreateClan() {
   const [lider, setLider] = useState('');
 
   async function criarCla() {
-    // URL apontando para o seu PHP rodando na porta 8000
-    const url = "http://localhost:8000/create_clan.php";
+    const url = "http://localhost:8000/src/routes/test2r.php";
 
     try {
       const resposta = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // AQUI ESTÁ O SEGREDO: Os nomes das chaves ('nome', 'lider') 
-        // devem ser iguais aos que o PHP está lendo ($input['nome']).
         body: JSON.stringify({ 
-            nome: nome, 
-            lider: lider 
+            name: nome, 
+            leader: lider 
         })
       });
 
