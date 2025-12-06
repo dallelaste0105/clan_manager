@@ -1,4 +1,6 @@
 <?php
+    require_once __DIR__ . '/../models/credentialModel.php';
+
     class CredentialController{
         private $db;
         

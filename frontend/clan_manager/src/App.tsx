@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'; 
 import LoginScreen from './screens/loginScreen';
 import SignupScreen from './screens/signupScreen';
+import MeuSVG from './screens/map';
 
 export default function App() {
   return (
@@ -10,6 +11,7 @@ export default function App() {
 
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/signup" element={<SignupScreen />} />
+      <Route path="/mapa" element={<MeuSVG />} />
       
     </Routes>
   )

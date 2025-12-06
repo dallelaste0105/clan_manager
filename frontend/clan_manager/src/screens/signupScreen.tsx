@@ -7,7 +7,7 @@ export default function SignupScreen() {
 
     async function signup({name, password}:{name:string, password:string}) {
         try {
-            const res = await api.post("/credentialRoute", {name, password}, {withCredentials:true})
+            const res = await api.post("/credentialRoute.php", {name, password}, {withCredentials:true})
             window.alert(res.data.msg)
         } 
         catch (err:any) {
