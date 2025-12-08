@@ -22,3 +22,5 @@ try {
     die(json_encode(["ok" => false, "msg" => "Erro na conexão com Banco: " . $e->getMessage()]));
 }
 ?>
+
+//php -S localhost:8000

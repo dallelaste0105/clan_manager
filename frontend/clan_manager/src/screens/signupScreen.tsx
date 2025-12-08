@@ -14,7 +14,7 @@ export default function SignupScreen() {
             if (err.response) {
                 window.alert(err.msg);
             } else {
-                window.alert("Erro inesperado ao criar produto");
+                window.alert("Erro inesperado");
             }
         }
     }

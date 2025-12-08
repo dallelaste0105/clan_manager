@@ -1,6 +1,6 @@
 <?php
 
-class SignupModel {
+class CredentialModel {
     private $db;
 
     public function __construct($db) {
@@ -18,5 +18,22 @@ class SignupModel {
 
         return $response->getInsertedId();
     }
+
+    function loginModel($name, $password) {
+        $res = $this->db->users->findOne(["name"=>$name]);
+
+        if (!$res) {
+            return false;
+        }
+
+        $hash = $res["password"];
+
+        if (password_verify($password, $hash)) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
 ?>
