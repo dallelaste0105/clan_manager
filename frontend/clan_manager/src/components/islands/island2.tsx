@@ -1,16 +1,6 @@
-import { useState } from "react";
-import IslandInteraction from "./islandInteraction";
-
-export default function Island() {
-  const [selectedPart, setSelectedPart] = useState<string | null>(null);
-
-  function handleClick(e: React.MouseEvent<SVGPathElement>) {
-    const id = (e.target as SVGPathElement).id;
-    if (!id) return;
-    setSelectedPart(id);
-  }
-
-  return (
+import * as React from "react"
+export default function Island2() {
+  return(
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="210mm"
@@ -9339,36 +9329,21 @@ export default function Island() {
         {"Ilha Itaense"}
       </tspan>
     </text>
-
-        <path
-          id="city1"
-          d="m26.13 85.383-37.533 1.608-13.129-35.2L4.888 28.43l31.31 20.76Z"
-          style={{ fill: "#009", fillOpacity: 0.5 }}
-          transform="matrix(.46178 0 0 -.5161 63.347 92.376)"
-          onClick={handleClick}
-        />
-
-        <path
-          id="city2"
-          d="m26.13 85.383-37.533 1.608-13.129-35.2L4.888 28.43l31.31 20.76Z"
-          style={{ fill: "#c00", fillOpacity: 0.5 }}
-          transform="matrix(.46178 0 0 -.5161 56.82 238.217)"
-          onClick={handleClick}
-        />
-
-        <path
-          id="city3"
-          d="m26.13 85.383-37.533 1.608-13.129-35.2L4.888 28.43l31.31 20.76Z"
-          style={{ fill: "#c00", fillOpacity: 0.5 }}
-          transform="matrix(.46178 0 0 -.5161 164.4 159.047)"
-          onClick={handleClick}
-        />
-
-      {selectedPart && (
-        <IslandInteraction
-          id={selectedPart}
-          close={() => setSelectedPart(null)}
-        />
-      )}
-</svg>
-)}
+    <path
+      d="m26.13 85.383-37.533 1.608-13.129-35.2L4.888 28.43l31.31 20.76Z"
+      style={{ fill: "#0009cc", fillOpacity: 0.496855, strokeWidth: 0.264583 }}
+      transform="matrix(.46178 0 0 -.5161 63.347 92.376)"
+    />
+    <path
+      d="m26.13 85.383-37.533 1.608-13.129-35.2L4.888 28.43l31.31 20.76Z"
+      style={{ fill: "#c00", fillOpacity: 0.49685502, strokeWidth: 0.264583 }}
+      transform="matrix(.46178 0 0 -.5161 56.82 238.217)"
+    />
+    <path
+      d="m26.13 85.383-37.533 1.608-13.129-35.2L4.888 28.43l31.31 20.76Z"
+      style={{ fill: "#c00", fillOpacity: 0.49685538, strokeWidth: 0.264583 }}
+      transform="matrix(.46178 0 0 -.5161 164.4 159.047)"
+    />
+  </svg>
+  )
+}

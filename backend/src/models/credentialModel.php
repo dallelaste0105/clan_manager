@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 class CredentialModel {
     private $db;
@@ -29,6 +30,7 @@ class CredentialModel {
         $hash = $res["password"];
 
         if (password_verify($password, $hash)) {
+            $_SESSION["name"] = $name;
             return true;
         }
 

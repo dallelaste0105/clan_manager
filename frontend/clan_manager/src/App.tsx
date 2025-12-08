@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'; 
 import LoginScreen from './screens/loginScreen';
 import SignupScreen from './screens/signupScreen';
-import MapaSvg from './screens/map';
+import MapaSvg from './screens/home';
 
 export default function App() {
   return (
