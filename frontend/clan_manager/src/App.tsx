@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginScreen from './screens/loginScreen';
 import SignupScreen from './screens/signupScreen';
 import MapaSvg from './screens/home';
+import CanvasTest from './screens/canvasTest';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/signup" element={<SignupScreen />} />
       <Route path="/mapa" element={<MapaSvg />} />
+      <Route path="/canvas" element={<CanvasTest seed={501} />} />
       
     </Routes>
   )
