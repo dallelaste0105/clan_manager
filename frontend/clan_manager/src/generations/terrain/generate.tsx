@@ -4,37 +4,55 @@ export function GenerateTerrain(ctx: CanvasRenderingContext2D, seed: number) {
   const width = 1280;
   const height = 720;
   const matrix: boolean[][] = [];
-  const hasGrass: number[][] = [];                   
+  const seedMap = String(seed).split('').map(Number);
 
-    //-----constrói a matriz
   for (let x = 0; x < width; x++) {
-    matrix[x] = [];                       
+    matrix[x] = [];
     for (let y = 0; y < height; y++) {
       matrix[x][y] = false;
     }
-    //-----passa sobre cada membro dela novamente
-    for (let x2 = 0; x2 < width; x2++) {                      
-        for (let y2 = 0; y2 < height; y2++) {
-
-            //------passa somente sobre a linha da matriz
-            for (let iX = 0; x2 < width; iX++) {  
-                if (matrix[x2][y2]) {
-                    hasGrass[0][iX];//------recebe a posição x de onde tem terra
-                }
-                //------passa somente sobre a coluna da matriz
-                for (let iY = 0; y2 < height; iY++) {
-                    if (matrix[x2][y2]) {
-                    hasGrass[0][iY];//-----recebe a posição y de onde tem terra
-                }
-                if ((hasGrass[0] && hasGrass[0])) {
-                    
-                }
-                else{
-                    Grass(ctx, x2, y2);
-                }
-                }   
-            }
-        }
   }
-}
+
+  function createIsland(x: number, y: number) {
+    if (x < 0 || x >= width || y < 0 || y >= height) return;
+    matrix[x][y] = true;
+    Grass(ctx, x, y);
+    //looping para criação das ilhas aqui!!!
+  }
+
+  const islandQuantityDeterminant = seedMap[5];
+  const firstPixelDeterminant = seedMap[10];
+
+  if (islandQuantityDeterminant === 0 || islandQuantityDeterminant === 1) {
+    if (firstPixelDeterminant <= 3) {
+      createIsland(640, 360);
+    } 
+    else if (firstPixelDeterminant >= 4 && firstPixelDeterminant <= 6) {
+      createIsland(450, 360);
+    } 
+    else {
+      createIsland(830, 360);
+    }
+  }
+  else if (islandQuantityDeterminant === 2) {
+    if (firstPixelDeterminant <= 5) {
+      createIsland(320, 360);
+      createIsland(960, 360);
+    } 
+    else {
+      createIsland(300, 200);
+      createIsland(980, 520);
+    }
+  }
+  else if (islandQuantityDeterminant === 3) {
+    createIsland(640, 180);
+    createIsland(320, 540);
+    createIsland(960, 540);
+  }
+  else {
+    createIsland(320, 200);
+    createIsland(960, 200);
+    createIsland(320, 520);
+    createIsland(960, 520);
+  }
 }
