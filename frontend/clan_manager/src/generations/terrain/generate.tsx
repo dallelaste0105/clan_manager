@@ -1,3 +1,4 @@
+import { House } from "../cities/house";
 import { Grass } from "./grass";
 
 export function GenerateTerrain(ctx: CanvasRenderingContext2D, seed: number) {
@@ -12,13 +13,68 @@ export function GenerateTerrain(ctx: CanvasRenderingContext2D, seed: number) {
       matrix[x][y] = false;
     }
   }
+        //supondo que x=450 e y=360
+        //---------------matriz---------------------
+        //(450, 360) (451, 360) (452, 360) (453, 360) (454, 360) (455, 360)
 
-  function createIsland(x: number, y: number) {
+        //(450, 361) (451, 361) (452, 361) (453, 361) (454, 361) (455, 361)
+
+        //(450, 362) (451, 362) (452 K 362) (453, 362) (454, 362) (455, 362)
+
+        //(450, 363) (451, 363) (452, 363) (453, 363) (454, 363) (455, 363)
+
+        //(450, 364) (451, 364) (452, 364) (453, 364) (454, 364) (455, 364)
+
+        //(450, 365) (451, 365) (452, 365) (453, 365) (454, 365) (455, 365)
+        //------------------------------------------
+    
+
+    function createIsland(x: number, y: number) {
     if (x < 0 || x >= width || y < 0 || y >= height) return;
-    matrix[x][y] = true;
-    Grass(ctx, x, y);
-    //looping para criação das ilhas aqui!!!
-  }
+    
+    for (let variation = 0; variation<(seedMap[4]*15); variation++) {
+      
+      for (let lX = x - variation; lX <= x + variation; lX++) {
+         for (let lY = y - variation; lY <= y + variation; lY++) {
+         if (lX === x - variation || 
+              lX === x + variation || 
+              lY === y - variation || 
+              lY === y + variation) {
+              Grass(ctx, lX, lY);
+          }
+      }
+    }
+  } 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const islandQuantityDeterminant = seedMap[5];
   const firstPixelDeterminant = seedMap[10];
