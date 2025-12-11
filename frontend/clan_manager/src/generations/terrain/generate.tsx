@@ -15,22 +15,33 @@ export function GenerateTerrain(ctx: CanvasRenderingContext2D, seed: number) {
   }
         //supondo que x=450 e y=360
         //---------------matriz---------------------
-        //(450, 360) (451, 360) (452, 360) (453, 360) (454, 360) (455, 360)
+        //(450, 359) (451, 359) (452, 359) (453, 359) (454, 359) k(455, 359)
 
-        //(450, 361) (451, 361) (452, 361) (453, 361) (454, 361) (455, 361)
+        //(450, 360) (451, 360) (452, 360) (453, 360) k(454, 360) k(455, 360)
 
-        //(450, 362) (451, 362) (452 K 362) (453, 362) (454, 362) (455, 362)
+        //(450, 361) (451, 361) (452, 361) k(453, 361) k(454, 361) k(455, 361)
 
-        //(450, 363) (451, 363) (452, 363) (453, 363) (454, 363) (455, 363)
+        //(450, 362) (451, 362) (452 K 362) k(453, 362) k(454, 362) k(455, 362)
 
-        //(450, 364) (451, 364) (452, 364) (453, 364) (454, 364) (455, 364)
+        //(450, 363) (451, 363) (452, 363) k(453, 363) k(454, 363) k(455, 363)
 
-        //(450, 365) (451, 365) (452, 365) (453, 365) (454, 365) (455, 365)
+        //(450, 364) (451, 364) (452, 364) (453, 364) k(454, 364) k(455, 364)
+
+        //(450, 365) (451, 365) (452, 365) (453, 365) (454, 365) k(455, 365)
         //------------------------------------------
     
 
     function createIsland(x: number, y: number) {
     if (x < 0 || x >= width || y < 0 || y >= height) return;
+
+    let grassCounter = 0;
+    let noGrassCounter = 0;
+    const determinant = seedMap[7];
+    let doGrass = true;
+    let doWater = false;
+
+    Grass(ctx, x, y);
+    matrix[x][y] = true;
     
     for (let variation = 0; variation<(seedMap[4]*15); variation++) {
         for (let xL = x-variation; xL <= (x+variation); xL++) {
@@ -42,7 +53,31 @@ export function GenerateTerrain(ctx: CanvasRenderingContext2D, seed: number) {
             //--area to apply imperfections to the island--
 
             if (xL > x && (yL >= y - variation && yL < y + variation)) {
-                // right
+                
+                for (let position = xL; position>=x; position--) {
+                  if (position - 1 < 0) break;
+                  if (matrix[position-1][yL-1] === true || matrix[position-1][yL+1] === true) {
+                    if ((grassCounter/determinant)>175) {//se tiver mt grama
+                      doGrass = false;
+                      doWater = true;
+                      grassCounter=0;
+                      continue;
+                    }
+                    if ((noGrassCounter/determinant)>175) {//se tiver mt agua
+                      doWater = false;
+                      doGrass = true;
+                      noGrassCounter=0;
+                      continue;
+                    }
+                    if (doGrass) {
+                      grassCounter+=1;
+                      Grass(ctx, xL, yL);
+                      matrix[xL][yL] = true;
+                      continue;
+                    }
+                    noGrassCounter+=1;
+                  }
+                }
             }
             else if (xL < x && (yL >= y - variation && yL < y + variation)) {
                 // left
@@ -55,8 +90,7 @@ export function GenerateTerrain(ctx: CanvasRenderingContext2D, seed: number) {
             }
             
             //--area to apply imperfections to the island--
-            Grass(ctx, xL, yL);
-            matrix[xL][yL] = true;
+            
           }
         }
       }
