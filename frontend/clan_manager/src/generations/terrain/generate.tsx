@@ -33,19 +33,17 @@ export function GenerateTerrain(ctx: CanvasRenderingContext2D, seed: number) {
     if (x < 0 || x >= width || y < 0 || y >= height) return;
     
     for (let variation = 0; variation<(seedMap[4]*15); variation++) {
-      
-      for (let lX = x - variation; lX <= x + variation; lX++) {
-         for (let lY = y - variation; lY <= y + variation; lY++) {
-         if (lX === x - variation || 
-              lX === x + variation || 
-              lY === y - variation || 
-              lY === y + variation) {
-              Grass(ctx, lX, lY);
+        for (let xL = x-variation; xL <= (x+variation); xL++) {
+          for (let yL = y-variation; yL <= (y+variation); yL++){
+            if (matrix[xL][yL]) {
+              continue;
+            }
+            Grass(ctx, xL, yL);
+            matrix[xL][yL] = true;
           }
+        }
       }
     }
-  } 
-}
 
 
 
