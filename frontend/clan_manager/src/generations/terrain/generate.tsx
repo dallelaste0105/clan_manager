@@ -38,6 +38,23 @@ export function GenerateTerrain(ctx: CanvasRenderingContext2D, seed: number) {
             if (matrix[xL][yL]) {
               continue;
             }
+
+            //--area to apply imperfections to the island--
+
+            if (xL > x && (yL >= y - variation && yL < y + variation)) {
+                // right
+            }
+            else if (xL < x && (yL >= y - variation && yL < y + variation)) {
+                // left
+            }
+            else if (yL < y && (xL >= x - variation && xL < x + variation)) {
+                // up
+            }
+            else if (yL > y && (xL >= x - variation && xL < x + variation)) {
+                // down
+            }
+            
+            //--area to apply imperfections to the island--
             Grass(ctx, xL, yL);
             matrix[xL][yL] = true;
           }
