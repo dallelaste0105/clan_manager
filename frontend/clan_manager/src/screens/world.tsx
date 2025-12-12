@@ -1,7 +1,17 @@
 import { useEffect, useRef } from "react";
 import { GenerateTerrain } from "../generations/terrain/generate";
 
-export default function World({ seed }: { seed: number }) {
+export default function World({
+  seed1,
+  seed2,
+  seed3,
+  seed4
+}: {
+  seed1: number;
+  seed2: number;
+  seed3: number;
+  seed4: number;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -11,13 +21,13 @@ export default function World({ seed }: { seed: number }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    GenerateTerrain(ctx, seed);
-    
+    GenerateTerrain(ctx, seed1, seed2, seed3, seed4);
+
     const handleClick = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const clickY = e.clientY - rect.top;
-      console.log("clicou no pixel:", clickX, clickY, e.clientX);
+      console.log("clicou no pixel:", clickX, clickY);
     };
 
     canvas.addEventListener("click", handleClick);
@@ -25,7 +35,7 @@ export default function World({ seed }: { seed: number }) {
     return () => {
       canvas.removeEventListener("click", handleClick);
     };
-  }, [seed]);
+  }, [seed1, seed2, seed3, seed4]);
 
   return (
     <canvas

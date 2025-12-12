@@ -11,8 +11,19 @@ export default function App() {
 
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/signup" element={<SignupScreen />} />
-      <Route path="/canvas" element={<World seed={83328274928394827483} />} />
+
+      <Route 
+        path="/canvas" 
+        element={
+          <World 
+            seed1={493084537453945345} 
+            seed2={532452345234767876} 
+            seed3={634563876835347368} 
+            seed4={234523080987098707} 
+          />
+        } 
+      />
       
     </Routes>
-  )
+  );
 }
