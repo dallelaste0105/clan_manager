@@ -46,32 +46,40 @@ export function GenerateTerrain(ctx: CanvasRenderingContext2D, seed: number) {
     for (let variation = 0; variation<(seedMap[4]*15); variation++) {
         for (let xL = x-variation; xL <= (x+variation); xL++) {
           for (let yL = y-variation; yL <= (y+variation); yL++){
+
             if (matrix[xL][yL]) {
               continue;
             }
-
-            //--area to apply imperfections to the island--
 
             if (xL > x && (yL >= y - variation && yL < y + variation)) {
                 
                 for (let position = xL; position>=x; position--) {
                   if (position - 1 < 0) break;
                   if (matrix[position-1][yL-1] === true || matrix[position-1][yL+1] === true) {
-                    if ((grassCounter/determinant)>175) {//se tiver mt grama
+                    if ((grassCounter/determinant)>175) {
                       doGrass = false;
                       doWater = true;
                       grassCounter=0;
                       continue;
                     }
-                    if ((noGrassCounter/determinant)>175) {//se tiver mt agua
+                    if ((noGrassCounter/determinant)>175) {
                       doWater = false;
                       doGrass = true;
                       noGrassCounter=0;
                       continue;
                     }
                     if (doGrass) {
-                      grassCounter+=1;
-                      Grass(ctx, xL, yL);
+                      const dx = xL - x;
+                      const dy = yL - y;
+                      const distance = Math.sqrt(dx*dx + dy*dy);
+
+                      const radius = seedMap[6] * 20;
+
+                      if (distance > radius) {
+                        continue;
+                      }
+                      
+                      grassCounter++;
                       matrix[xL][yL] = true;
                       continue;
                     }
@@ -89,41 +97,43 @@ export function GenerateTerrain(ctx: CanvasRenderingContext2D, seed: number) {
                 // down
             }
             
-            //--area to apply imperfections to the island--
-            
           }
         }
       }
-    }
 
+      //buraco na direita começo
+      let whereStart = 0;
+      let whereFinish = 0;
+      if (seedMap[4]>0) {
+        for (let index=seedMap[4]*15+x;index>x+(seedMap[8]*10);index--) {
+          if (whereStart>seedMap[3]*5) {
+            for (let newLimit = 0; newLimit < 20; newLimit++) {
+              whereStart=seedMap[newLimit];
+            }
+          }
+          if (whereFinish>seedMap[9]*5) {
+            for (let newLimit = 0; newLimit < 20; newLimit++) {
+              whereFinish=seedMap[newLimit];
+            }
+          }
+          whereStart+=2;
+          whereFinish+=1;
+          
+            for (let yIndex = y-whereStart*3; yIndex< y+whereFinish*3; yIndex++) { 
+                matrix[index][yIndex] = false;
+          }
+        }
+      }
+      //buraco na direita final
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
+          if (matrix[x][y] === true) {
+            Grass(ctx, x, y);
+          }
+        }
+  }
+}
 
   const islandQuantityDeterminant = seedMap[5];
   const firstPixelDeterminant = seedMap[10];
@@ -160,4 +170,6 @@ export function GenerateTerrain(ctx: CanvasRenderingContext2D, seed: number) {
     createIsland(320, 520);
     createIsland(960, 520);
   }
+  
+
 }
