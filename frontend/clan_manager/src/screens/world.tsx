@@ -2,17 +2,7 @@ import { useEffect, useRef } from "react";
 import { GenerateTerrain } from "../generations/terrain/generate";
 import api from "../api";
 
-export default function World({
-  seed1,
-  seed2,
-  seed3,
-  seed4
-}: {
-  seed1: number;
-  seed2: number;
-  seed3: number;
-  seed4: number;
-}) {//!!! a criação de seeds deve ser automática, n ser passada como parâmetro no app!!!
+export default function World() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -24,13 +14,44 @@ export default function World({
 
     const ctx: CanvasRenderingContext2D = rawCtx;
 
+    function generateSeedBigInt(): bigint {
+      let result = 0n;
+      for (let i = 0; i < 20; i++) {
+        const digit = BigInt(Math.floor(Math.random() * 9) + 1);
+        result = result * 10n + digit;
+      }
+      return result;
+    }
+
+    function seedToNumber(seed: bigint): number {
+      return Number(seed % 2147483647n);
+    }
+
+    const seed1 = seedToNumber(generateSeedBigInt());
+    const seed2 = seedToNumber(generateSeedBigInt());
+    const seed3 = seedToNumber(generateSeedBigInt());
+    const seed4 = seedToNumber(generateSeedBigInt());
+
     async function verifyUserArchipelagos() {
       try {
-        const res = await api.get("/archipelagoRoute.php",{withCredentials:true})
+        const res = await api.get("/archipelagoRoute.php", {
+          withCredentials: true
+        });
+
         const seeds = res.data.msg;
+
         if (seeds) {
-          GenerateTerrain(ctx, seeds[0], seeds[1], seeds[2], seeds[3]);
+          GenerateTerrain(
+            ctx,
+            Number(seeds[0]),
+            Number(seeds[1] ?? ""),
+            Number(seeds[2] ?? ""),
+            Number(seeds[3] ?? "")
+          );
+          return;
         }
+
+        GenerateTerrain(ctx, seed1, seed2, seed3, seed4);
       } catch (error) {
         GenerateTerrain(ctx, seed1, seed2, seed3, seed4);
       }
@@ -50,7 +71,7 @@ export default function World({
     return () => {
       canvas.removeEventListener("click", handleClick);
     };
-  }, [seed1, seed2, seed3, seed4]);
+  }, []);
 
   return (
     <canvas

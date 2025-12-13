@@ -82,7 +82,6 @@ export function GenerateTerrain(
       }
     }
 
-    // Buraco na direita (INALTERADO)
     let whereStart = 0;
     let whereFinish = 0;
 

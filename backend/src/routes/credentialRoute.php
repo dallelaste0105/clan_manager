@@ -9,11 +9,24 @@ require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/../controllers/credentialController.php';
 
 $requestMethod = $_SERVER["REQUEST_METHOD"];
+$req = json_decode(file_get_contents("php://input"), true);
+$whitchFunction = $req["whitchFunction"];
+$credentialController = new CredentialController($db);
 
 if ($requestMethod == "POST") {
-    $userController = new CredentialController($db);
-    $userController->signupController();
+    switch ($whitchFunction) {
+        case 'signup':
+            $credentialController->signupController();
+            break;
+        case 'login':
+            $credentialController->loginController();
+            break;
+        
+        default:
+            echo json_encode(["error" => "Algo deu errado no credenciamento"]);
+            break;
+    }
 } else {
-    echo json_encode(["erro" => "Invalid method"]);
+    echo json_encode(["error" => "Erro fatal: Método inválido"]);
 }
 ?>
