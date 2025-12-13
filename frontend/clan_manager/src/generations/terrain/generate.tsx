@@ -128,32 +128,32 @@ export function GenerateTerrain(
   if (islandQuantityDeterminant === 0 || islandQuantityDeterminant === 1) {
     if (firstPixelDeterminant <= 3) {
       createIsland(640, 360, s1);
-      GenerateCity(ctx, matrix, 640 - s1[4] * 20, 640 + s1[4] * 20, 360 - s1[4] * 20, 360 + s1[4] * 20);
+      GenerateCity(ctx, matrix, 640 - s1[4] * 20, 640 + s1[4] * 20, 360 - s1[4] * 20, 360 + s1[4] * 20, s1);
     } else if (firstPixelDeterminant <= 6) {
       createIsland(450, 360, s1);
-      GenerateCity(ctx, matrix, 450 - s1[4] * 20, 450 + s1[4] * 20, 360 - s1[4] * 20, 360 + s1[4] * 20);
+      GenerateCity(ctx, matrix, 450 - s1[4] * 20, 450 + s1[4] * 20, 360 - s1[4] * 20, 360 + s1[4] * 20, s1);
     } else {
       createIsland(830, 360, s1);
-      GenerateCity(ctx, matrix, 830 - s1[4] * 20, 830 + s1[4] * 20, 360 - s1[4] * 20, 360 + s1[4] * 20);
+      GenerateCity(ctx, matrix, 830 - s1[4] * 20, 830 + s1[4] * 20, 360 - s1[4] * 20, 360 + s1[4] * 20, s1);
     }
   } else if (islandQuantityDeterminant === 2) {
     createIsland(320, 360, s1);
-    GenerateCity(ctx, matrix, 320 - s1[4] * 20, 320 + s1[4] * 20, 360 - s1[4] * 20, 360 + s1[4] * 20);
+    GenerateCity(ctx, matrix, 320 - s1[4] * 20, 320 + s1[4] * 20, 360 - s1[4] * 20, 360 + s1[4] * 20, s1);
     createIsland(960, 360, s2);
-    GenerateCity(ctx, matrix, 960 - s2[4] * 20, 960 + s2[4] * 20, 360 - s2[4] * 20, 360 + s2[4] * 20);
+    GenerateCity(ctx, matrix, 960 - s2[4] * 20, 960 + s2[4] * 20, 360 - s2[4] * 20, 360 + s2[4] * 20, s2);
   } else if (islandQuantityDeterminant === 3) {
     createIsland(640, 180, s1);
-    GenerateCity(ctx, matrix, 640 - s1[4] * 20, 640 + s1[4] * 20, 180 - s1[4] * 20, 180 + s1[4] * 20);
+    GenerateCity(ctx, matrix, 640 - s1[4] * 20, 640 + s1[4] * 20, 180 - s1[4] * 20, 180 + s1[4] * 20, s1);
     createIsland(320, 540, s2);
-    GenerateCity(ctx, matrix, 320 - s2[4] * 20, 320 + s2[4] * 20, 540 - s2[4] * 20, 540 + s2[4] * 20);
+    GenerateCity(ctx, matrix, 320 - s2[4] * 20, 320 + s2[4] * 20, 540 - s2[4] * 20, 540 + s2[4] * 20, s2);
     createIsland(960, 540, s3);
-    GenerateCity(ctx, matrix, 960 - s3[4] * 20, 960 + s3[4] * 20, 540 - s3[4] * 20, 540 + s3[4] * 20);
+    GenerateCity(ctx, matrix, 960 - s3[4] * 20, 960 + s3[4] * 20, 540 - s3[4] * 20, 540 + s3[4] * 20, s3);
   } else {
     createIsland(320, 200, s1);
-    GenerateCity(ctx, matrix, 320 - s1[4] * 20, 320 + s1[4] * 20, 200 - s1[4] * 20, 200 + s1[4] * 20);
+    GenerateCity(ctx, matrix, 320 - s1[4] * 20, 320 + s1[4] * 20, 200 - s1[4] * 20, 200 + s1[4] * 20, s1);
     createIsland(960, 200, s2);
-    GenerateCity(ctx, matrix, 960 - s2[4] * 20, 960 + s2[4] * 20, 200 - s2[4] * 20, 200 + s2[4] * 20);
+    GenerateCity(ctx, matrix, 960 - s2[4] * 20, 960 + s2[4] * 20, 200 - s2[4] * 20, 200 + s2[4] * 20, s2);
     createIsland(320, 520, s3);
-    GenerateCity(ctx, matrix, 320 - s3[4] * 20, 320 + s3[4] * 20, 520 - s3[4] * 20, 520 + s3[4] * 20);
+    GenerateCity(ctx, matrix, 320 - s3[4] * 20, 320 + s3[4] * 20, 520 - s3[4] * 20, 520 + s3[4] * 20, s3);
   }
 }

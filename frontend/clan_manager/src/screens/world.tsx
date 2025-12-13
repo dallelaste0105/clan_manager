@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { GenerateTerrain } from "../generations/terrain/generate";
+import api from "../api";
 
 export default function World({
   seed1,
@@ -11,17 +12,31 @@ export default function World({
   seed2: number;
   seed3: number;
   seed4: number;
-}) {
+}) {//!!! a criação de seeds deve ser automática, n ser passada como parâmetro no app!!!
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const rawCtx = canvas.getContext("2d");
+    if (!rawCtx) return;
 
-    GenerateTerrain(ctx, seed1, seed2, seed3, seed4);
+    const ctx: CanvasRenderingContext2D = rawCtx;
+
+    async function verifyUserArchipelagos() {
+      try {
+        const res = await api.get("/archipelagoRoute.php",{withCredentials:true})
+        const seeds = res.data.msg;
+        if (seeds) {
+          GenerateTerrain(ctx, seeds[0], seeds[1], seeds[2], seeds[3]);
+        }
+      } catch (error) {
+        GenerateTerrain(ctx, seed1, seed2, seed3, seed4);
+      }
+    }
+
+    verifyUserArchipelagos();
 
     const handleClick = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
