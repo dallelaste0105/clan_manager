@@ -64,7 +64,7 @@ import * as PIXI from "pixi.js";
     PIXI.Assets.load("/rv24.png"),
 ]); */
 
-    const player = new PIXI.Sprite(texture);
+    const player = new PIXI.AnimatedSprite(texture);
 
     const blurFilter = new PIXI.BlurFilter();
     blurFilter.strength = 0;
