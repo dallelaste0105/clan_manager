@@ -10,7 +10,7 @@ console.log("Tentando conectar em:", process.env.MONGO_URI);
 const app = express();
 
 if (!process.env.MONGO_URI) {
-    console.warn("⚠️ AVISO: .env não encontrado. Usando conexão padrão.");
+    console.warn("AVISO: .env não encontrado. Usando conexão padrão.");
     process.env.MONGO_URI = "mongodb://localhost:27017/meu_jogo_pixi";
 }
 
@@ -25,5 +25,5 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando na porta ${PORT}`);
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
