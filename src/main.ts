@@ -1,32 +1,52 @@
-import * as PIXI from "pixi.js";
+import * as PIXI from "pixi.js";//importa o PIXI
 
-(async()=>{
-    const game = new PIXI.Application();
-    await game.init({
-        background:"#21b2bdb4",
-        resizeTo:window
+(async()=>{//deve ser uma operação assíncrona, pois deve esperar o PIXI carregar
+    const game = new PIXI.Application();//carrega uma nova aplicação do PIXI
+    await game.init({//Inicia a aplicação
+        background:"#21b2bdb4",//define a cor de fundo
+        resizeTo:window//define o tamanho da tela
     })
-    document.body.appendChild(game.canvas);
+    const ws = new WebSocket('ws://localhost:3000');//importa a conexão com webSocket
+    
+    ws.addEventListener('open', () => {
+            console.log("Conectado ao servidor WebSocket!");
+        });
 
-    const sheet = await PIXI.Assets.load('/player.json');
+    document.addEventListener('keypress', e => {
+        if (e.code === "KeyS") {
+            const comando = {
+                tipo: "keypress",
+                tecla: "S",
+                descricao: "O jogador se moveu para trás"
+            };
 
-    const player = new PIXI.AnimatedSprite(sheet.animations['down']);
-
-    const blurFilter = new PIXI.BlurFilter();
-    blurFilter.strength = 0;
-
-    const trailContainer = new PIXI.Container();
-    game.stage.addChild(trailContainer);
-    game.stage.addChild(player);
-
-    player.filters = [blurFilter];
-
+        ws.send(JSON.stringify(comando));
+        
+        console.log("Enviei o pacote:", comando);
+        }
+    });
+    
+    ws.addEventListener("message", (event) => {
+        const objetoRecebido = JSON.parse(event.data);
+        enemy.x += 100;
+    })
+    
+    document.body.appendChild(game.canvas);//faz o corpo do documento receber como filho o canvas do jogo
+    const sheet = await PIXI.Assets.load('/player.json');//carrega as texturas do jogador
+    const player = new PIXI.AnimatedSprite(sheet.animations['down']);//aplica a animação de baixo no player
+    const enemy = new PIXI.AnimatedSprite(sheet.animations['down']);//aplica a animação de baixo no inimigo
     player.x = 500;
     player.y = 500;
-    player.anchor.set(0.5);
+    player.anchor.set(0.5);//define a posição de âncora (centro de massa) do jogador
     const velocity = 2;
+
+    enemy.x = 500;
+    enemy.y = 500;
+    enemy.anchor.set(0.5);//define a posição de âncora (centro de massa) do jogador
     
     game.stage.addChild(player);
+    game.stage.addChild(enemy);
+
 
     let keys = {a:false, s:false, d:false, w:false};
 
