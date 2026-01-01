@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import connectDB from './db.js';
+import credentialRoute from '../backend/routes/credentialRoute.js';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
+app.use('/credential', credentialRoute)
 
 app.get('/', (req, res) => {
     res.json({ status: 'API Online', message: 'Servidor do Jogo rodando!' });

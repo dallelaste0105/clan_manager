@@ -1,29 +1,38 @@
-const express = require("express");
-const http = require("http");
-const ws = require("ws");
-const path = require("path");
-
+import express from "express";
+import http from "http";
+import { WebSocketServer } from "ws";
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
 const server = http.createServer(app);
-const wss = new ws.Server({ server });
-
+const wss = new WebSocketServer({ server }); 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
+
+
+
 
 wss.on("connection", socket => {
     console.log("Cliente conectado!");
 
     socket.on("message", data => {
         const objetoRecebido = JSON.parse(data.toString());
-        console.log("Recebi de um cliente:", objetoRecebido);
+        let whoAreYou = "";
+        if (objetoRecebido.who == "player") {
+            whoAreYou = "player";
+        }
+        if (objetoRecebido.who == "enemy") {
+            whoAreYou = "enemy";
+        }
         const broadcastMsg = {
-            tipo: "atualizacao_global",
-            texto: `Alguém pressionou a tecla ${objetoRecebido.tecla}`
+            who: whoAreYou
         };
 
         wss.clients.forEach(function(client) {
-            if (client.readyState === ws.OPEN) {
+            if (client.readyState === 1) {
                 client.send(JSON.stringify(broadcastMsg));
             }
         });

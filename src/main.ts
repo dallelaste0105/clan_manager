@@ -13,22 +13,39 @@ import * as PIXI from "pixi.js";//importa o PIXI
         });
 
     document.addEventListener('keypress', e => {
-        if (e.code === "KeyS") {
+        
             const comando = {
                 tipo: "keypress",
-                tecla: "S",
-                descricao: "O jogador se moveu para trás"
+                who: whoAreYou,
+                key:e.code
             };
 
         ws.send(JSON.stringify(comando));
         
         console.log("Enviei o pacote:", comando);
         }
+    );
+
+    let whoAreYou = "player";
+    document.addEventListener('keypress', e => {
+        if (e.code == "KeyE" && whoAreYou =="player") {
+            whoAreYou="enemy";
+            console.log(`Mudou para ${whoAreYou}`);
+        }
+        else if (e.code == "KeyE" && whoAreYou =="enemy") {
+            whoAreYou="player";
+            console.log(`Mudou para ${whoAreYou}`);
+        }
     });
     
     ws.addEventListener("message", (event) => {
         const objetoRecebido = JSON.parse(event.data);
-        enemy.x += 100;
+        if (objetoRecebido.who == "player") {
+            enemy.x += 100;
+        }
+        if (objetoRecebido.who == "enemy") {
+            player.x += 100;
+        }
     })
     
     document.body.appendChild(game.canvas);//faz o corpo do documento receber como filho o canvas do jogo
