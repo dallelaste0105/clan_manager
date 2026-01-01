@@ -1,30 +1,43 @@
-import db from "../db.js";
+import mongoose from "mongoose";
 
-async function userAlreadyExistsModel(name) {
-    return new Promise((resolve, reject) => {
-        const queryOne = "SELECT name FROM users WHERE name = ?";
-        db.query(queryOne, [name], (errorOne, resultOne) => {
-            if (errorOne) {
-                return reject(false);
-            }
-            return resolve(true);
-        })
-    })
+const UserSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
+}, {
+    timestamps: true
+});
+
+const User = mongoose.model("User", UserSchema);
+
+async function playerAlreadyExistsModel(name) {
+    const user = await User.findOne({ name });
+    return !!user;
 }
 
 async function signupModel(name, hashedPassword) {
-    return new Promise((resolve, reject) => {
-        const queryOne = "INSERT INTO users (name, password) VALUES (?, ?)";
-        db.query(queryOne, [name, hashedPassword], (errorOne, resultOne) => {
-            if (errorOne) {
-                return reject(false);
-            }
-            return resolve(true);
-        })
-    })
+    const user = new User({
+        name,
+        password: hashedPassword
+    });
+
+    await user.save();
+    return true;
+}
+
+async function getPlayer(name) {
+    const user = await User.findOne({ name });
+    return user;
 }
 
 export default {
-    userAlreadyExistsModel,
-    signupModel
+    playerAlreadyExistsModel,
+    signupModel,
+    getPlayer
 };

@@ -29,11 +29,21 @@ async function loginController(req, res) {
             return res.status(500).json({ok:false, msg:"Campos incompletos"});
         }
         const player = await db.getPlayer(name);
-        if (player.length>0) {
-            const passwordOk = await bCrypt.compare(password, player["password"]);
+        if (player) {
+            const passwordOk = await bCrypt.compare(password, player.password);
             if (passwordOk) {
-                const jsonwebtoken = jwt.sign({id:player["id"]}, process.env.JWT_SECRET, {expiresIn:"7d"});
-                return res.status(200).json({ok:true, msg:jsonwebtoken});
+                const jsonwebtoken = jwt.sign(
+                { id: player._id.toString() },
+                process.env.JWT_SECRET,
+                { expiresIn: "7d" }
+                );
+                res.cookie("jwt", jsonwebtoken, {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: "lax"
+                });
+
+                return res.status(200).json({ok:true, msg:"Login efetuado com sucesso"});
             }
             return res.status(500).json({ok:false, msg:"A senha está incorreta"});
         }

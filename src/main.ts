@@ -6,64 +6,43 @@ import * as PIXI from "pixi.js";//importa o PIXI
         background:"#21b2bdb4",//define a cor de fundo
         resizeTo:window//define o tamanho da tela
     })
-    const ws = new WebSocket('ws://localhost:3000');//importa a conexão com webSocket
+    const ws = new WebSocket('ws://localhost:3000');//cria a conexão enviando os cookies
     
     ws.addEventListener('open', () => {
             console.log("Conectado ao servidor WebSocket!");
         });
-
-    document.addEventListener('keypress', e => {
-        
-            const comando = {
-                tipo: "keypress",
-                who: whoAreYou,
-                key:e.code
-            };
-
-        ws.send(JSON.stringify(comando));
-        
-        console.log("Enviei o pacote:", comando);
-        }
-    );
-
-    let whoAreYou = "player";
-    document.addEventListener('keypress', e => {
-        if (e.code == "KeyE" && whoAreYou =="player") {
-            whoAreYou="enemy";
-            console.log(`Mudou para ${whoAreYou}`);
-        }
-        else if (e.code == "KeyE" && whoAreYou =="enemy") {
-            whoAreYou="player";
-            console.log(`Mudou para ${whoAreYou}`);
-        }
-    });
     
+    let userId;
     ws.addEventListener("message", (event) => {
         const objetoRecebido = JSON.parse(event.data);
-        if (objetoRecebido.who == "player") {
-            enemy.x += 100;
-        }
-        if (objetoRecebido.who == "enemy") {
-            player.x += 100;
-        }
+        userId = objetoRecebido.userId;
+        playerEntered();
     })
     
     document.body.appendChild(game.canvas);//faz o corpo do documento receber como filho o canvas do jogo
+    function playerEntered() {
+        game.stage.addChild(player);
+    }
+
     const sheet = await PIXI.Assets.load('/player.json');//carrega as texturas do jogador
     const player = new PIXI.AnimatedSprite(sheet.animations['down']);//aplica a animação de baixo no player
-    const enemy = new PIXI.AnimatedSprite(sheet.animations['down']);//aplica a animação de baixo no inimigo
+    
+    const style = new PIXI.TextStyle({
+        fontFamily: 'Arial',
+        fontSize: 14,
+        fontWeight: 'bold',
+        fill: '#ffffff',
+        stroke: '#000000',
+    });
+    const nameTag = new PIXI.Text({ text: userId, style });
+    nameTag.anchor.set(0.5);
+    nameTag.y = -40;
+    player.addChild(nameTag);
+
     player.x = 500;
     player.y = 500;
     player.anchor.set(0.5);//define a posição de âncora (centro de massa) do jogador
     const velocity = 2;
-
-    enemy.x = 500;
-    enemy.y = 500;
-    enemy.anchor.set(0.5);//define a posição de âncora (centro de massa) do jogador
-    
-    game.stage.addChild(player);
-    game.stage.addChild(enemy);
-
 
     let keys = {a:false, s:false, d:false, w:false};
 
