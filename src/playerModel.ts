@@ -26,16 +26,39 @@ class PlayerModel {
 
     public walk(key: string): void {
         if (!this.player) return;
-        if (key == "KeyG") {
-            this.x += 100;
-            this.player.x = this.x; 
-            this.player.textures = this.sheet.animations['right'];
+        switch (key) {
+            case "KeyA":
+                this.x -= this.velocity;
+                this.player.x = this.x; 
+                this.player.textures = this.sheet.animations['left'];
+                break;
+            case "KeyS":
+                this.y += this.velocity;
+                this.player.y = this.y; 
+                this.player.textures = this.sheet.animations['down'];
+                break;
+            case "KeyD":
+                this.x += this.velocity;
+                this.player.x = this.x; 
+                this.player.textures = this.sheet.animations['right'];
+                break;
+            case "KeyW":
+                this.y -= this.velocity;
+                this.player.y = this.y; 
+                this.player.textures = this.sheet.animations['up'];
+                break;
         }
     }
 
     public drawItSelf(): void {
         if (this.player) {
             this.game.stage.addChild(this.player);
+        }
+    }
+
+    public killItSelf(): void {
+        if (this.player) {
+            this.game.stage.removeChild(this.player);
         }
     }
 }

@@ -9,6 +9,11 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    active: {
+        type: Boolean,
+        required: true,
+        default: false // Adicionei default para evitar erro no signup
     }
 }, {
     timestamps: true
@@ -24,7 +29,8 @@ async function playerAlreadyExistsModel(name) {
 async function signupModel(name, hashedPassword) {
     const user = new User({
         name,
-        password: hashedPassword
+        password: hashedPassword,
+        active: false
     });
 
     await user.save();
@@ -32,12 +38,23 @@ async function signupModel(name, hashedPassword) {
 }
 
 async function getPlayer(name) {
-    const user = await User.findOne({ name });
-    return user;
+    const user = await User.findOne({ name }); 
+    
+    if (user) {
+        await User.updateOne({ _id: user._id }, { active: true });
+        return user;
+    }
+    return null;
+}
+
+async function logoutModel(userId) {
+    const result = await User.updateOne({ _id: userId }, { active: false });
+    return result.modifiedCount > 0 || result.matchedCount > 0;
 }
 
 export default {
     playerAlreadyExistsModel,
     signupModel,
-    getPlayer
+    getPlayer,
+    logoutModel
 };

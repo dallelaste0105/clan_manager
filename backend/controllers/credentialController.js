@@ -59,7 +59,22 @@ async function loginController(req, res) {
     }
 }
 
+async function logoutController(req, res) {
+    const {userId} = req.body;
+    try {
+        const didLogout = await db.logoutModel(userId);
+        if (didLogout) {
+            return res.status(200).json({ok:false, msg:"Logout feito com sucesso"});
+        }
+        return res.status(500).json({ok:false, msg:"Erro ao fazer logout"});
+    } catch (error) {
+        return res.status(500).json({ok:false, msg:"Erro crítico"});
+    }
+
+}
+
 export default {
     signupController,
-    loginController
+    loginController,
+    logoutController
 };

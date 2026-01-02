@@ -41,7 +41,7 @@ async function initGame() {
     const ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
     
     ws.addEventListener('open', () => {
-            console.log("Conectado ao servidor WebSocket via Proxy!");
+        console.log("Conectado ao servidor WebSocket via Proxy!");
     });
 
     ws.addEventListener('error', (err) => {
@@ -54,15 +54,16 @@ async function initGame() {
 
     document.addEventListener("keydown", (e)=>{
         if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ key:e.code }));
+            ws.send(JSON.stringify({ type:"move", key:e.code.toString() }));
         }
     })
 
+    //lógica geral de recebimento de mensagens vindas do back
     ws.addEventListener("message", async (event) => {
         const objetoRecebido = JSON.parse(event.data);
-        console.log("Mensagem recebida:", objetoRecebido);
         
-        if (objetoRecebido.msg == "newUser") {
+        //verifica se é um novo usuário que entrou na conexão
+        if (objetoRecebido.type == "newUser") {
             if (!playersList.find(p => p.playerId === objetoRecebido.userId)) {
                 const newPlayer = new PlayerModel(objetoRecebido.userId, 500, 500, game);
                 await newPlayer.loadAssets(); 
@@ -70,15 +71,34 @@ async function initGame() {
                 playersList.push(newPlayer);
             }
         }
-        else if (objetoRecebido.msg == "move") {
+
+        else if (objetoRecebido.type == "move") {
             const p = playersList.find(pl => pl.playerId == objetoRecebido.userId);
             if (p) {
-                p.walk("KeyG");
+                switch (objetoRecebido.key) {
+                    case "KeyA":
+                        p.walk("KeyA")
+                        break;
+                    case "KeyS":
+                        p.walk("KeyS")
+                        break;
+                    case "KeyD":
+                        p.walk("KeyD")
+                        break;
+                    case "KeyW":
+                        p.walk("KeyW")
+                        break;
+                }
+            }
+        }
+
+        else if (objetoRecebido.type == "removeUser") {
+        const index = playersList.findIndex(pl => pl.playerId == objetoRecebido.userId);
+        if (index !== -1) {
+            const p = playersList[index];
+            p.killItSelf(); 
+            playersList.splice(index, 1);
             }
         }
     })
-
-    game.ticker.add(() => {
-        // Game loop
-    });
 }
