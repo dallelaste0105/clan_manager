@@ -12,7 +12,7 @@ if (botaoSignup) {
             if(res.ok) console.log("Signup: Deu certo (Sucesso)");
             else console.log("Signup: Deu errado (Erro do servidor)");
         })
-        .catch(err => console.log("Signup: Falha na conexão"));
+        .catch(() => console.log("Signup: Falha na conexão"));
     });
 }
 
@@ -24,12 +24,13 @@ if (botaoLogin) {
         fetch('http://localhost:3000/credential/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: nome, password: senha })
+            body: JSON.stringify({ name: nome, password: senha }),
+            credentials: 'include'
         })
         .then(res => {
             if(res.ok) console.log("Login: Deu certo (Sucesso)");
             else console.log("Login: Deu errado (Erro do servidor)");
         })
-        .catch(err => console.log("Login: Falha na conexão"));
+        .catch(() => console.log("Login: Falha na conexão"));
     });
 }

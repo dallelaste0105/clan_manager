@@ -1,10 +1,12 @@
 import db from "../models/credentialModel.js"
 import bCrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import path from "path";
 
 async function signupController(req, res) {
     const {name, password} = req.body;
     try {
+        console.log("passo 1")
         if (!name || !password) {
             return res.status(500).json({ok:false, msg:"Campos incompletos"});
         }
@@ -15,6 +17,7 @@ async function signupController(req, res) {
         const hashedPassword = await bCrypt.hash(password, 10);
         const signup = await db.signupModel(name, hashedPassword);
         if (signup) {
+            console.log("Signup realizado com sucesso");
             return res.status(200).json({ok:true, msg:"Signup feito com sucesso"});
         }
     } catch (error) {
@@ -37,10 +40,13 @@ async function loginController(req, res) {
                 process.env.JWT_SECRET,
                 { expiresIn: "7d" }
                 );
+                console.log(jsonwebtoken);
                 res.cookie("jwt", jsonwebtoken, {
-                    httpOnly: true,
-                    secure: false,
-                    sameSite: "lax"
+                    httpOnly: false, 
+                    secure: false,   
+                    sameSite: "lax",
+                    path: "/", 
+                    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 dias
                 });
 
                 return res.status(200).json({ok:true, msg:"Login efetuado com sucesso"});
