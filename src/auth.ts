@@ -1,13 +1,9 @@
-// src/auth.ts
-
 export function initAuthListeners() {
-    // Escuta cliques no documento inteiro
     document.addEventListener('click', async (e: Event) => {
         const target = e.target as HTMLElement;
 
-        // --- LÓGICA DE SIGNUP ---
         if (target.matches('.signupButton')) {
-            e.preventDefault(); // Previne comportamento padrão se for form
+            e.preventDefault();
             
             const nameInput = document.querySelector('.signupName') as HTMLTextAreaElement;
             const passInput = document.querySelector('.signupPassword') as HTMLTextAreaElement;
@@ -38,7 +34,6 @@ export function initAuthListeners() {
             }
         }
 
-        // --- LÓGICA DE LOGIN ---
         if (target.matches('.loginButton')) {
             e.preventDefault();
 
@@ -61,9 +56,7 @@ export function initAuthListeners() {
 
                 if (res.ok) {
                     console.log("Login: Sucesso", data);
-                    // Opcional: Redirecionar para o jogo
                     window.location.href = "/game";
-                    // Precisamos disparar um evento para o router notar a mudança de URL manual
                     window.dispatchEvent(new PopStateEvent('popstate'));
                 } else {
                     console.error("Login: Erro", data.msg);
@@ -71,6 +64,29 @@ export function initAuthListeners() {
                 }
             } catch (err) {
                 console.error("Login: Falha na conexão", err);
+            }
+        }
+
+        if (target.matches('.worlds')) {
+            e.preventDefault();
+
+            try {
+                const res = await fetch('/credential/getworlds', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: "include"
+                });
+
+                const data = await res.json();
+                
+                if (res.ok) {
+                    //tem q retornar data aqui
+                } else {
+                    console.error("Signup: Erro", data.msg);
+                    alert("Erro: " + data.msg);
+                }
+            } catch (err) {
+                console.error("Signup: Falha na conexão", err);
             }
         }
     });

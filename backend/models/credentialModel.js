@@ -21,6 +21,26 @@ const UserSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", UserSchema);
 
+const WorldSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    seed: {
+        type: String,
+        required: true
+    },
+    playerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    }
+}, {
+    timestamps: true
+});
+
+const World = mongoose.model("World", WorldSchema);
+
+
 async function playerAlreadyExistsModel(name) {
     const user = await User.findOne({ name });
     return !!user;
@@ -52,9 +72,32 @@ async function logoutModel(userId) {
     return result.modifiedCount > 0 || result.matchedCount > 0;
 }
 
+async function createWorldModel(playerId, worldName) {
+    function createSeed() {
+        let seed = "";
+        for (let i = 0; i < 20; i++) {
+            seed += Math.floor(Math.random() * 10);
+        }
+        return seed;
+    }
+    const seed = createSeed();
+    return await World.create({
+        name: worldName,
+        seed: seed,
+        playerId: playerId
+    });
+}
+
+async function getWorldsModel(playerId) {
+    const yourWorlds = World.find({playerId:playerId});
+    return (await yourWorlds).map;
+}
+
 export default {
     playerAlreadyExistsModel,
     signupModel,
     getPlayer,
-    logoutModel
+    logoutModel,
+    createWorldModel,
+    getWorldsModel
 };

@@ -37,6 +37,26 @@ async function initGame() {
     const appDiv = document.querySelector('#app'); 
     if(appDiv) appDiv.innerHTML = ''; 
     document.body.appendChild(game.canvas);
+
+    //cria-se um conteiner e adiciona ele como filho do stage(plano cartesiano)
+    const mapContainer = new PIXI.Container();
+    game.stage.addChild(mapContainer);
+
+    game.ticker.add(() => {
+        const eu = playersList[0] as any;
+
+        if (eu) {
+            const euX = eu.sprite?.x ?? eu.x ?? 0;
+            const euY = eu.sprite?.y ?? eu.y ?? 0;
+            game.stage.pivot.x = euX;
+            game.stage.pivot.y = euY;
+
+            game.stage.position.x = game.screen.width / 2;
+            game.stage.position.y = game.screen.height / 2;
+            console.log(playersList[0].x);
+        }
+    });
+
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
     
@@ -72,6 +92,7 @@ async function initGame() {
             }
         }
 
+        //verifica se um jogador se moveu
         else if (objetoRecebido.type == "move") {
             const p = playersList.find(pl => pl.playerId == objetoRecebido.userId);
             if (p) {

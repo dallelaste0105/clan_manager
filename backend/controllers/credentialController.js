@@ -73,8 +73,33 @@ async function logoutController(req, res) {
 
 }
 
+async function createWorldController(req, res) {
+    const {id} = req.player;
+    const {worldName} = req.body;
+    try {
+        const ok = await db.createWorldModel(id, worldName);
+        if (ok) {
+            return res.status(200).json({ok:true, msg:"Mundo criado com sucesso"});
+        }
+    } catch (error) {
+        return res.status(500).json({ok:false, msg:"Erro crítico"});
+    }
+}
+
+async function getWorldsController(req, res) {
+    const {id} = req.player;
+    try {
+        const yourWorlds = await db.getWorldsModel(id);
+        return res.status(200).json({ok:true, msg:yourWorlds});
+    } catch (error) {
+        return res.status(500).json({ok:false, msg:"Erro crítico"});
+    }
+}
+
 export default {
     signupController,
     loginController,
-    logoutController
+    logoutController,
+    createWorldController,
+    getWorldsController
 };
